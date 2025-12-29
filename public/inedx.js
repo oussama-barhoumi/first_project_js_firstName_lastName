@@ -144,10 +144,23 @@ function deposit() {
   let amount = Number(prompt("Deposit amount (max 1000):"));
   if (amount > 1000) return alert("Limit exceeded");
 
-  currentUser.balance -= amount;
+  currentUser.balance += amount;
   currentUser.history.push(`Deposit: +${amount}`);
 }
+function loan() {
+  let maxLoan = currentUser.balance * 0.2;
+  let amount = Number(prompt(`Loan max: ${maxLoan}`));
 
+  if (amount > maxLoan) return alert("Loan denied");
+
+  currentUser.balance += amount * 1.2;
+  currentUser.loan += amount;
+  currentUser.history.push(`Loan: +${amount}`);
+}
+
+function Invest(){
+
+}
 
 
 
