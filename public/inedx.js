@@ -132,6 +132,8 @@ Balance: ${currentUser.balance} DH
       case "5": history(); break;
     }
   }
+
+  
 }
 
 
