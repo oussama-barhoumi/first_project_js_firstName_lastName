@@ -6,3 +6,24 @@ class User {
         this .password =password;
     }
 }
+
+
+
+
+
+function validateName(name){
+    name = name.trim();
+
+    if ( name.length < 5)
+        return null;
+    if (/[^a-zA-Z ]/.test(name))
+        return null;
+
+
+    return name
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+    
+}
