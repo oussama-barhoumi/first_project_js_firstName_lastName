@@ -157,7 +157,14 @@ function loan() {
   currentUser.loan += amount;
   currentUser.history.push(`Loan: +${amount}`);
 }
+function invest() {
+  let amount = Number(prompt("Investment amount:"));
+  if (amount > currentUser.balance) return alert("Not enouhh money");
 
+  currentUser.balance -= amount;
+  currentUser.investment += amount * 1.2;
+  currentUser.history.push(`investment: ${amount}`);
+}
 
 
 
