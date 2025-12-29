@@ -126,6 +126,8 @@ function changePassword() {
   User.save();
 
   alert("Password changed successfully");
+  if (newPassword === oldPassword)
+  return alert("New password must be different");
 }
 
 
