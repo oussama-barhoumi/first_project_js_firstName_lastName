@@ -140,6 +140,13 @@ Balance: ${currentUser.balance} DH
    currentUser.balance -= amount;
   currentUser.history.push(`Withdraw: -${amount}`);
  }
+function deposit() {
+  let amount = Number(prompt("Deposit amount (max 1000):"));
+  if (amount > 1000) return alert("Limit exceeded");
+
+  currentUser.balance -= amount;
+  currentUser.history.push(`Deposit: +${amount}`);
+}
 
 
 
