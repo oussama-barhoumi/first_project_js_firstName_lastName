@@ -40,3 +40,10 @@ if (users.some( u => u.email === eamil))
     return null;
 return email;
   }
+  function validatAge(age){
+    agr = age.trim();
+    if (!/^\d{1,2}$/.test(age))
+        return null;
+    return Number(age)
+  }
+
