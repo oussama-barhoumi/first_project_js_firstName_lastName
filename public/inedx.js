@@ -47,3 +47,44 @@ return email;
     return Number(age)
   }
 
+
+
+
+function validatePassword(password) {
+
+    password = password.trim();
+
+    if (password.includes(" "))
+        return null;
+    if (password.length < 7 )
+        return null;
+    if (!/[@#\-+\*\/]/.test(password))
+        return null;
+
+    return password;
+}
+
+function signUp() {
+  let name = validateName(prompt("Enter full name:"));
+  if (!name) return alert("Invalid name");
+
+  let email = validateEmail(prompt("Enter email:"));
+  if (!email) return alert("Invalid email");
+
+  let age = validateAge(prompt("Enter age:"));
+  if (!age) return alert("Invalid age");
+
+  let password = validatePassword(prompt("Enter password:"));
+  if (!password) return alert("Invalid password");
+
+  let confirm = prompt("Confirm password:");
+  if (confirm !== password) {
+    alert("Blocked: passwords do not match");
+    return;
+  }
+
+  let user = new User(name, email, age, password);
+  users.push(user);
+  alert("Account created successfully");
+}
+
