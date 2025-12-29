@@ -156,7 +156,6 @@ function loan() {
   currentUser.balance += amount * 1.2;
   currentUser.loan += amount;
   currentUser.history.push(`Loan: +${amount}`);
-  
 }
 
 
