@@ -105,6 +105,29 @@ function login() {
   userMenu();
 }
 
+function changePassword() {
+  let email = prompt("Enter your email").trim().toLowerCase();
+
+  let user = User.findByEmail(email);
+  if (!user) return alert("Email not found");
+
+  let oldPassword = prompt("Enter old password");
+  if (oldPassword !== user.password)
+    return alert("Wrong old password");
+
+  let newPassword = validatePassword(prompt("Enter new password"));
+  if (!newPassword) return alert("Invalid new password");
+
+  let confirm = prompt("Confirm new password");
+  if (confirm !== newPassword)
+    return alert("Passwords do not match");
+
+  user.password = newPassword;
+  User.save();
+
+  alert("Password changed successfully");
+}
+
 
 
 function userMenu() {
@@ -169,6 +192,19 @@ function history(){
     alert(currentUser.history.join("\n") || "no history yet");
 }
 
+while (true) {
+  let choice = prompt(`
+Choose an option:
+1- Sign Up
+2- Login
+3- Exit
+`);
+
+  if (choice === "3" || choice === "exit") break;
+
+  if (choice === "1") signUp();
+  if (choice === "2") login();
+}
 
 
 
