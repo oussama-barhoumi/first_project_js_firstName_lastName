@@ -132,9 +132,15 @@ Balance: ${currentUser.balance} DH
       case "5": history(); break;
     }
   }
-
-  
 }
+ function Withdraw(){
+    let amount = Number(prompt("Withdraw amount"));
+    if (amount> currentUser.balance)
+        return alert("");
+   currentUser.balance -= amount;
+  currentUser.history.push(`Withdraw: -${amount}`);
+ }
+
 
 
 
