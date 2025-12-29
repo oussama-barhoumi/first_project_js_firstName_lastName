@@ -1,10 +1,30 @@
 class User {
-    constructor(name , email , age , password){
-        this.mame = name;
-        this.email= email;
-        this.age = age ;
-        this .password =password;
-    }
+  static users = [];
+
+  constructor(name, email, age, password) {
+    this.name = name;
+    this.email = email;
+    this.age = age;
+    this.password = password;
+    this.balance = 0;
+    this.loan = 0;
+    this.investment = 0;
+    this.history = [];
+  }
+
+  static addUser(user) {
+    User.users.push(user);
+  }
+
+  static findByEmail(email) {
+    return User.users.find(u => u.email === email);
+  }
+
+  static login(email, password) {
+    return User.users.find(
+      u => u.email === email && u.password === password
+    );
+  }
 }
 
 
@@ -88,3 +108,106 @@ function signUp() {
   alert("Account created successfully");
 }
 
+
+function login() {
+  let email = prompt("Enter email:").trim().toLowerCase();
+  let password = prompt("Enter password:");
+
+  let user = users.find(u => u.email === email && u.password === password);
+  if (!user) {
+    alert("Invalid credentials");
+    return;
+  }
+
+  currentUser = user;
+  alert(`Welcome ${user.name}`);
+  userMenu();
+} 
+
+
+
+function userMenu() {
+  while (true) {
+    let choice = prompt(`
+Balance: ${currentUser.balance} DH
+1- Withdraw
+2- Deposit
+3- Loan
+4- Invest
+5- History
+6- Logout
+`);
+
+    if (choice === "6") {
+      currentUser = null;
+      break;
+    }
+
+    switch (choice) {
+      case "1": withdraw(); break;
+      case "2": deposit(); break;
+      case "3": loan(); break;
+      case "4": invest(); break;
+      case "5": history(); break;
+    }
+  }
+}
+
+function withdraw() {
+  let amount = Number(prompt("Withdraw amount:"));
+  if (amount > currentUser.balance) return alert("Insufficient funds");
+
+  currentUser.balance -= amount;
+  currentUser.history.push(`Withdraw: -${amount}`);
+}
+function deposit() {
+  let amount = Number(prompt("Deposit amount (max 1000):"));
+  if (amount > 1000) return alert("Limit exceeded");
+
+  currentUser.balance += amount;
+  currentUser.history.push(`Deposit: +${amount}`);
+}
+function loan() {
+  let maxLoan = currentUser.balance * 0.2;
+  let amount = Number(prompt(`Loan max: ${maxLoan}`));
+
+  if (amount > maxLoan) return alert("Loan denied");
+
+  currentUser.balance += amount * 1.2;
+  currentUser.loan += amount;
+  currentUser.history.push(`Loan: +${amount}`);
+}
+function loan() {
+  let maxLoan = currentUser.balance * 0.2;
+  let amount = Number(prompt(`Loan max: ${maxLoan}`));
+
+  if (amount > maxLoan) return alert("Loan denied");
+
+  currentUser.balance += amount * 1.2;
+  currentUser.loan += amount;
+  currentUser.history.push(`Loan: +${amount}`);
+}
+function invest() {
+  let amount = Number(prompt("Investment amount:"));
+  if (amount > currentUser.balance) return alert("Not enough money");
+
+  currentUser.balance -= amount;
+  currentUser.investment += amount * 1.2;
+  currentUser.history.push(`Investment: ${amount}`);
+}
+function history() {
+  alert(currentUser.history.join("\n") || "No history yet");
+}
+while (true) {
+  let choice = prompt(`
+Choose an option:
+1- Sign Up
+2- Login
+3- Exit
+`);
+
+  if (choice === "3" || choice === "exit") break;
+
+  if (choice === "1") signUp();
+  if (choice === "2") login();
+}
