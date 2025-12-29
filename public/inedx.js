@@ -31,57 +31,40 @@ class User {
 
 
 
-function validateName(name){
-    name = name.trim();
+function validateName(name) {
+  name = name.trim();
+  if (name.length < 5) return null;
+  if (/[^a-zA-Z ]/.test(name)) return null;
 
-    if ( name.length < 5)
-        return null;
-    if (/[^a-zA-Z ]/.test(name))
-        return null;
-
-
-    return name
+  return name
     .toLowerCase()
     .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-    
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
- 
-function validatEmail(email){
-    email = email.trim().toLowerCase();
-  if ( email.includes (" ")) 
-    return null ;
-  if (email.length < 10 )
-    return null;
-if (email.match(/@/g)||[].length !==1)
-    return null;
-if (users.some( u => u.email === eamil)) 
-    return null;
-return email;
-  }
-  function validatAge(age){
-    agr = age.trim();
-    if (!/^\d{1,2}$/.test(age))
-        return null;
-    return Number(age)
-  }
 
+function validateEmail(email) {
+  email = email.trim().toLowerCase();
 
+  if (email.includes(" ")) return null;
+  if (email.length < 10) return null;
+  if ((email.match(/@/g) || []).length !== 1) return null;
+  if (User.findByEmail(email)) return null;
+  return email;
+}
 
+function validateAge(age) {
+  age = age.trim();
+  if (!/^\d{1,2}$/.test(age)) return null;
+  return Number(age);
+}
 
 function validatePassword(password) {
-
-    password = password.trim();
-
-    if (password.includes(" "))
-        return null;
-    if (password.length < 7 )
-        return null;
-    if (!/[@#\-+\*\/]/.test(password))
-        return null;
-
-    return password;
+  password = password.trim();
+  if (password.includes(" ")) return null;
+  if (password.length < 7) return null;
+  if (!/[@#\-+\*\/]/.test(password)) return null;
+  return password;
 }
 
 function signUp() {
@@ -109,20 +92,18 @@ function signUp() {
 }
 
 
-function login() {
-  let email = prompt("Enter email:").trim().toLowerCase();
-  let password = prompt("Enter password:");
+let currentUser = null;
 
-  let user = users.find(u => u.email === email && u.password === password);
-  if (!user) {
-    alert("Invalid credentials");
-    return;
-  }
+function login() {
+  let email = prompt("Email").trim().toLowerCase();
+  let password = prompt("Password");
+
+  let user = User.login(email, password);
+  if (!user) return alert("Invalid credentials");
 
   currentUser = user;
-  alert(`Welcome ${user.name}`);
   userMenu();
-} 
+}
 
 
 
@@ -153,61 +134,7 @@ Balance: ${currentUser.balance} DH
   }
 }
 
-function withdraw() {
-  let amount = Number(prompt("Withdraw amount:"));
-  if (amount > currentUser.balance) return alert("Insufficient funds");
 
-  currentUser.balance -= amount;
-  currentUser.history.push(`Withdraw: -${amount}`);
-}
-function deposit() {
-  let amount = Number(prompt("Deposit amount (max 1000):"));
-  if (amount > 1000) return alert("Limit exceeded");
 
-  currentUser.balance += amount;
-  currentUser.history.push(`Deposit: +${amount}`);
-}
-function loan() {
-  let maxLoan = currentUser.balance * 0.2;
-  let amount = Number(prompt(`Loan max: ${maxLoan}`));
 
-  if (amount > maxLoan) return alert("Loan denied");
 
-  currentUser.balance += amount * 1.2;
-  currentUser.loan += amount;
-  currentUser.history.push(`Loan: +${amount}`);
-}
-function loan() {
-  let maxLoan = currentUser.balance * 0.2;
-  let amount = Number(prompt(`Loan max: ${maxLoan}`));
-
-  if (amount > maxLoan) return alert("Loan denied");
-
-  currentUser.balance += amount * 1.2;
-  currentUser.loan += amount;
-  currentUser.history.push(`Loan: +${amount}`);
-}
-function invest() {
-  let amount = Number(prompt("Investment amount:"));
-  if (amount > currentUser.balance) return alert("Not enough money");
-
-  currentUser.balance -= amount;
-  currentUser.investment += amount * 1.2;
-  currentUser.history.push(`Investment: ${amount}`);
-}
-function history() {
-  alert(currentUser.history.join("\n") || "No history yet");
-}
-while (true) {
-  let choice = prompt(`
-Choose an option:
-1- Sign Up
-2- Login
-3- Exit
-`);
-
-  if (choice === "3" || choice === "exit") break;
-
-  if (choice === "1") signUp();
-  if (choice === "2") login();
-}
