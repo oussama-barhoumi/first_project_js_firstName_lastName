@@ -134,7 +134,7 @@ function changePassword() {
 
 function userMenu() {
   while (true) {
-    let choice = prompt(`
+    let c = prompt(`
 Balance: ${currentUser.balance} DH
 1- Withdraw
 2- Deposit
@@ -144,51 +144,60 @@ Balance: ${currentUser.balance} DH
 6- Logout
 `);
 
-    if (choice === "6") {
+    if (c === "6") {
       currentUser = null;
       break;
     }
 
-    switch (choice) {
-      case "1": withdraw(); break;
-      case "2": deposit(); break;
-      case "3": loan(); break;
-      case "4": invest(); break;
-      case "5": history(); break;
-    }
+    if (c === "1") withdraw();
+    if (c === "2") deposit();
+    if (c === "3") loan();
+    if (c === "4") invest();
+    if (c === "5") history();
   }
 }
- function Withdraw(){
-    let amount = Number(prompt("Withdraw amount"));
-    if (amount> currentUser.balance)
-        return alert("");
-   currentUser.balance -= amount;
+
+
+
+
+function withdraw() {
+  let amount = Number(prompt("Withdraw amount"));
+  if (isNaN(amount) || amount <= 0) return alert("Invalid amount");
+  if (amount > currentUser.balance) return alert("Insufficient funds");
+
+  currentUser.balance -= amount;
   currentUser.history.push(`Withdraw: -${amount}`);
- }
+  User.save();
+}
 function deposit() {
-  let amount = Number(prompt("Deposit amount (max 1000):"));
+  let amount = Number(prompt("Deposit (max 1000)"));
+  if (isNaN(amount) || amount <= 0) return alert("Invalid amount");
   if (amount > 1000) return alert("Limit exceeded");
 
   currentUser.balance += amount;
   currentUser.history.push(`Deposit: +${amount}`);
+  User.save();
 }
 function loan() {
-  let maxLoan = currentUser.balance * 0.2;
-  let amount = Number(prompt(`Loan max: ${maxLoan}`));
-
-  if (amount > maxLoan) return alert("Loan denied");
+  let max = currentUser.balance * 0.2;
+  let amount = Number(prompt(`Max loan: ${max}`));
+  if (isNaN(amount) || amount <= 0) return alert("Invalid amount");
+  if (amount > max) return alert("Loan denied");
 
   currentUser.balance += amount * 1.2;
   currentUser.loan += amount;
   currentUser.history.push(`Loan: +${amount}`);
+  User.save();
 }
 function invest() {
-  let amount = Number(prompt("Investment amount:"));
-  if (amount > currentUser.balance) return alert("Not enouhh money");
+  let amount = Number(prompt("Investment amount"));
+  if (isNaN(amount) || amount <= 0) return alert("Invalid amount");
+  if (amount > currentUser.balance) return alert("Not enough money");
 
   currentUser.balance -= amount;
   currentUser.investment += amount * 1.2;
-  currentUser.history.push(`investment: ${amount}`);
+  currentUser.history.push(`Investment: ${amount}`);
+  User.save();
 }
 function history(){
     alert(currentUser.history.join("\n") || "no history yet");
@@ -196,16 +205,16 @@ function history(){
 
 while (true) {
   let choice = prompt(`
-Choose an option:
 1- Sign Up
 2- Login
-3- Exit
+3- Change Password
+4- Exit
 `);
 
-  if (choice === "3" || choice === "exit") break;
-
+  if (choice === "4" || choice === "exit") break;
   if (choice === "1") signUp();
   if (choice === "2") login();
+  if (choice === "3") changePassword();
 }
 
 
