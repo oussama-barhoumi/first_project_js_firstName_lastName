@@ -165,8 +165,9 @@ function invest() {
   currentUser.investment += amount * 1.2;
   currentUser.history.push(`investment: ${amount}`);
 }
-
-
+function history(){
+    alert(currentUser.history.join("\n") || "no history yet");
+}
 
 
 
